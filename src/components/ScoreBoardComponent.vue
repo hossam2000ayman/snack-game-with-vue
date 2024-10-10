@@ -1,7 +1,9 @@
 <template>
-  <div class="score-board">
-    <h3>Score : {{ score }}</h3>
-  </div>
+  <v-card class="pa-3" outlined>
+    <v-card-title class="text-center">
+      <h3>Score: {{ score }}</h3>
+    </v-card-title>
+  </v-card>
 </template>
 
 <script>
@@ -16,10 +18,8 @@ export default {
 </script>
 
 <style scoped>
-.score-board {
-  margin-bottom: 20px;
-  text-align: center;
-  font-style: 20px;
+h3 {
   font-weight: bold;
+  color: #1976d2;
 }
 </style>

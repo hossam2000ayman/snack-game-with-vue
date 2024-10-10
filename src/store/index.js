@@ -16,10 +16,10 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    // Move the head based on current direction
     MOVE_SNAKE(state) {
-      const snake = [...state.snake]; //copy the snake array
-      const head = { ...snake[0] }; //snake head
+      const snake = [...state.snake];
+      const head = { ...snake[0] };
+
       switch (state.direction) {
         case "UP":
           head.y -= 1;
@@ -34,18 +34,25 @@ export default createStore({
           head.x += 1;
           break;
       }
-      //add the new head position
-      snake.unshift(head);
-      //remove the last segment (tail) to maintain the same length
-      snake.pop();
 
+      snake.unshift(head);
+      snake.pop();
       state.snake = snake;
     },
     SET_FOOD_POSITION(state, food) {
       state.food = food;
     },
-    UPDATE_DIRECTION(state, direction) {
-      state.direction = direction;
+    UPDATE_DIRECTION(state, newDirection) {
+      const oppositeDirections = {
+        UP: "DOWN",
+        DOWN: "UP",
+        LEFT: "RIGHT",
+        RIGHT: "LEFT",
+      };
+
+      if (newDirection !== oppositeDirections[state.direction]) {
+        state.direction = newDirection;
+      }
     },
     UPDATE_SCORE(state) {
       state.score += 1;
@@ -72,14 +79,9 @@ export default createStore({
     },
   },
   actions: {
-    moveSnake({ commit, state }) {
-      //logic of snake movement
-      let newSnake = [...state.snake];
-      //Update Snake based on the current direction
-      //Handle collision with food , border or itself
-      commit("MOVE_SNAKE", { snake: newSnake });
+    moveSnake({ commit }) {
+      commit("MOVE_SNAKE");
     },
-
     setFoodPosition({ commit }) {
       const newFood = {
         x: Math.floor(Math.random() * 20),
@@ -88,5 +90,4 @@ export default createStore({
       commit("SET_FOOD_POSITION", newFood);
     },
   },
-  modules: {},
 });

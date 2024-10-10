@@ -18,15 +18,6 @@ const routes = [
       title: "Game Page",
     },
   },
-
-  {
-    path: "/game-over",
-    name: "GameOver",
-    component: () => import("@/views/GameOverView.vue"), //lazy loading
-    meta: {
-      title: "Game Over Page",
-    },
-  },
 ];
 
 const router = createRouter({
