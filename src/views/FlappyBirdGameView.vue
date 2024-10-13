@@ -1,5 +1,6 @@
 <template>
   <v-container class="flappy-bird-game" fluid>
+    <!-- Score Display -->
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card class="game-board" elevation="4">
@@ -31,16 +32,14 @@
               <h1>Game Over!</h1>
             </v-row>
             <v-row justify="center">
+              <h3>Score : {{ score }}</h3>
+            </v-row>
+            <v-row justify="center">
               <v-btn @click="resetGame">Restart</v-btn>
             </v-row>
           </div>
         </v-card>
       </v-col>
-    </v-row>
-
-    <!-- Score Display -->
-    <v-row justify="center">
-      <h2>Score: {{ score }}</h2>
     </v-row>
   </v-container>
 </template>
