@@ -9,13 +9,48 @@ const routes = [
       title: "Home Page",
     },
   },
+  {
+    path: "/game-selection",
+    name: "Game Selection",
+    component: () => import("@/views/GameSelection.vue"), //lazy loading
+    meta: {
+      title: "Game Selection Page",
+    },
+  },
 
   {
-    path: "/game",
-    name: "Game",
-    component: () => import("@/views/GameView.vue"), //lazy loading
+    path: "/snake",
+    name: "Snake",
+    component: () => import("@/views/SnakeGameView.vue"), //lazy loading
     meta: {
-      title: "Game Page",
+      title: "Snake Page",
+    },
+  },
+
+  {
+    path: "/mario",
+    name: "Mario",
+    component: () => import("@/views/MarioGameView.vue"),
+    meta: {
+      title: "Mario Page",
+    },
+  },
+
+  {
+    path: "/flappy-bird",
+    name: "Flappy Bird",
+    component: () => import("@/views/FlappyBirdGameView.vue"),
+    meta: {
+      title: "Flappy Bird Page",
+    },
+  },
+
+  {
+    path: "/pacman",
+    name: "Pacman",
+    component: () => import("@/views/PacmanGameView.vue"),
+    meta: {
+      title: "Pacman Page",
     },
   },
 ];

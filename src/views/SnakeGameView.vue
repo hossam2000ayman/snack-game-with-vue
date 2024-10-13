@@ -57,17 +57,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(["snake", "food", "score", "isGameOver"]),
+    ...mapState("SnakeModule", ["snake", "food", "score", "isGameOver"]),
   },
   components: {
     ScoreBoardComponent,
   },
   mounted() {
+    console.log("Snake Game mounted");
     this.gameLoop();
-    window.addEventListener("keydown", this.handleKeyPress);
+    window.addEventListener("keypress", this.handleKeyPress);
   },
   methods: {
-    ...mapActions(["moveSnake", "setFoodPosition"]),
+    ...mapActions("SnakeModule", ["moveSnake", "setFoodPosition"]),
     gameLoop() {
       if (!this.isGameOver) {
         this.moveSnake();
@@ -83,22 +84,22 @@ export default {
           head.y < 0 ||
           head.y >= boardHeight
         ) {
-          this.$store.commit("GAME_OVER", true);
+          this.$store.commit("SnakeModule/GAME_OVER", true);
           return;
         }
 
         // Check Self Collision
         for (let i = 1; i < this.snake.length; i++) {
           if (head.x === this.snake[i].x && head.y === this.snake[i].y) {
-            this.$store.commit("GAME_OVER", true);
+            this.$store.commit("SnakeModule/GAME_OVER", true);
             return;
           }
         }
 
         // Check Food Collision
         if (head.x === this.food.x && head.y === this.food.y) {
-          this.$store.commit("UPDATE_SCORE");
-          this.$store.commit("GROW_SNAKE");
+          this.$store.commit("SnakeModule/UPDATE_SCORE");
+          this.$store.commit("SnakeModule/GROW_SNAKE");
           this.setFoodPosition();
           this.snackbar = true;
         }
@@ -109,7 +110,7 @@ export default {
       }
     },
     restartGame() {
-      this.$store.commit("RESET_GAME");
+      this.$store.commit("SnakeModule/RESET_GAME");
       this.isGameOver = false;
       this.gameLoop();
     },
@@ -124,7 +125,7 @@ export default {
       const newDirection = directionMap[event.key];
 
       if (newDirection) {
-        this.$store.commit("UPDATE_DIRECTION", newDirection);
+        this.$store.commit("SnakeModule/UPDATE_DIRECTION", newDirection);
       }
     },
   },

@@ -1,30 +1,23 @@
 <template>
-  <v-container class="home" fluid>
-    <v-row
-      justify="center"
-      align="center"
-      class="text-center"
-      style="height: 100vh"
-    >
-      <v-col cols="12" md="4">
-        <h1 class="display-1">Snack Game</h1>
-        <v-btn color="primary" @click="startGame" large>Start Game</v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="home">
+    <h1>Welcome to the Game Collection</h1>
+    <v-btn color="primary" @click="goToGames">Play Games</v-btn>
+  </div>
 </template>
 
 <script>
 export default {
   methods: {
-    startGame() {
-      this.$router.push({ name: "Game" });
+    goToGames() {
+      this.$router.push({ name: "Game Selection" });
     },
   },
 };
 </script>
-<style scoped>
+
+<style>
 .home {
-  background-color: #f5f5f5;
+  text-align: center;
+  justify-items: center;
 }
 </style>
