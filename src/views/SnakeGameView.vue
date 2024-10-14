@@ -65,7 +65,7 @@ export default {
   mounted() {
     console.log("Snake Game mounted");
     this.gameLoop();
-    window.addEventListener("keypress", this.handleKeyPress);
+    window.addEventListener("keydown", this.handleKeyPress);
   },
   methods: {
     ...mapActions("SnakeModule", ["moveSnake", "setFoodPosition"]),

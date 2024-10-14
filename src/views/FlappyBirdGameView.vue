@@ -84,7 +84,7 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("keypress", this.handleKeyPress);
+    window.addEventListener("keydown", this.handleKeyPress);
     // Define the game loop using setInterval
     this.gameLoop = setInterval(() => {
       if (!this.isGameOver) {
@@ -98,7 +98,7 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.gameLoop); // Stop the game loop
-    window.removeEventListener("keypress", this.handleKeyPress); // Clean up the event listener
+    window.removeEventListener("keydown", this.handleKeyPress); // Clean up the event listener
   },
 };
 </script>
