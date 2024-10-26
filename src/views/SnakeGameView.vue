@@ -1,79 +1,86 @@
 <template>
-  <v-container class="game-view" fluid>
-    <v-row justify="center">
-      <v-col cols="12" md="6">
-        <v-card class="pa-4">
-          <v-card-title class="justify-center">
-            <ScoreBoardComponent :score="score" />
-          </v-card-title>
+  <GameLayout :score="score">
+    <v-container class="game-view" fluid>
+      <v-row justify="center">
+        <v-col cols="12" md="6">
+          <v-card class="pa-4">
+            <v-card-text>
+              <div class="board">
+                <div
+                  v-for="(segment, index) in snake"
+                  :key="index"
+                  class="snake-segment"
+                  :style="{
+                    top: segment.y * 20 + 'px',
+                    left: segment.x * 20 + 'px',
+                  }"
+                ></div>
+                <div
+                  class="food"
+                  :style="{ top: food.y * 20 + 'px', left: food.x * 20 + 'px' }"
+                ></div>
+              </div>
+            </v-card-text>
+            <v-card-actions class="w-100 d-flex justify-center">
+              <v-btn @click="goBack">Go Back to Collection</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
 
-          <v-card-text>
-            <div class="board">
-              <div
-                v-for="(segment, index) in snake"
-                :key="index"
-                class="snake-segment"
-                :style="{
-                  top: segment.y * 20 + 'px',
-                  left: segment.x * 20 + 'px',
-                }"
-              ></div>
-              <div
-                class="food"
-                :style="{ top: food.y * 20 + 'px', left: food.x * 20 + 'px' }"
-              ></div>
-            </div>
+      <!-- Game Over Dialog -->
+      <v-dialog v-model="isGameOver" persistent max-width="400px">
+        <v-card>
+          <v-card-title class="headline text-center">Game Over</v-card-title>
+          <v-card-text class="text-center">
+            <p>Your Score: {{ score }}</p>
           </v-card-text>
-          <v-card-actions>
-            <v-btn @click="goBack">Go Back to Collection</v-btn>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="primary" @click="restartGame">Play Again</v-btn>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- Snackbar for scoring notification -->
-    <v-snackbar v-model="snackbar" color="green" top> You scored! </v-snackbar>
-
-    <!-- Game Over Dialog -->
-    <v-dialog v-model="isGameOver" persistent max-width="400px">
-      <v-card>
-        <v-card-title class="headline text-center">Game Over</v-card-title>
-        <v-card-text class="text-center">
-          <p>Your Score: {{ score }}</p>
-        </v-card-text>
-        <v-card-actions class="justify-center">
-          <v-btn color="primary" @click="restartGame">Play Again</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+      </v-dialog>
+    </v-container>
+  </GameLayout>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
-import ScoreBoardComponent from "@/components/ScoreBoardComponent.vue";
+import GameLayout from "./GameLayout.vue";
 
 export default {
   data() {
     return {
-      snackbar: false,
+      keyPressTimeout: null,
     };
   },
   computed: {
-    ...mapState("SnakeModule", ["snake", "food", "score", "isGameOver"]),
+    ...mapState("SnakeModule", [
+      "snake",
+      "food",
+      "score",
+      "isGameOver",
+      "isGameActive",
+    ]),
   },
   components: {
-    ScoreBoardComponent,
+    GameLayout,
   },
   mounted() {
-    console.log("Snake Game mounted");
-    this.gameLoop();
+    this.initializeGame();
     window.addEventListener("keydown", this.handleKeyPress);
   },
   methods: {
     ...mapActions("SnakeModule", ["moveSnake", "setFoodPosition"]),
-    gameLoop() {
-      if (!this.isGameOver) {
+
+    initializeGame() {
+      this.$store.dispatch("SnakeModule/unFreezeGame"); // Set the game to active
+      this.startGameLoop();
+    },
+
+    startGameLoop() {
+      // Only start the game loop if the game is active and not over
+      if (this.isGameActive && !this.isGameOver) {
         this.moveSnake();
 
         const head = this.snake[0];
@@ -104,19 +111,20 @@ export default {
           this.$store.commit("SnakeModule/UPDATE_SCORE");
           this.$store.commit("SnakeModule/GROW_SNAKE");
           this.setFoodPosition();
-          this.snackbar = true;
         }
 
         setTimeout(() => {
-          this.gameLoop();
+          this.startGameLoop();
         }, 200);
       }
     },
+
     restartGame() {
       this.$store.commit("SnakeModule/RESET_GAME");
       this.isGameOver = false;
-      this.gameLoop();
+      this.initializeGame(); // Restart the game properly
     },
+
     handleKeyPress(event) {
       const directionMap = {
         ArrowUp: "UP",
@@ -127,13 +135,30 @@ export default {
 
       const newDirection = directionMap[event.key];
 
-      if (newDirection) {
+      if (newDirection && !this.keyPressTimeout) {
         this.$store.commit("SnakeModule/UPDATE_DIRECTION", newDirection);
+
+        // Set a timeout to control the debounce interval
+        this.keyPressTimeout = setTimeout(() => {
+          this.keyPressTimeout = null;
+        }, 100);
       }
     },
+
     goBack() {
       this.$router.back();
     },
+  },
+
+  beforeUnmount() {
+    // Freeze the game state when leaving
+    this.$store.dispatch("SnakeModule/freezeGame");
+
+    // Clear timeout on component unmount to avoid memory leaks
+    if (this.keyPressTimeout) {
+      clearTimeout(this.keyPressTimeout);
+    }
+    window.removeEventListener("keydown", this.handleKeyPress); // Clean up event listener
   },
 };
 </script>
