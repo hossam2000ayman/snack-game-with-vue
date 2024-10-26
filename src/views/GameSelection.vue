@@ -3,39 +3,37 @@
   <div class="game-selection">
     <h1>Select a Game</h1>
     <v-row>
-      <v-col cols="12" md="4">
-        <v-card @click="selectGame('Snake')">
+      <v-col v-for="game in games" :key="game.name" cols="3" md="4">
+        <v-card @click="selectGame(game.name)">
           <!-- <v-img src="@/assets/snake_game.jpg" /> -->
-          <v-card-title>Snake Game</v-card-title>
+          <v-card-title>{{ game.name }}</v-card-title>
+          <v-card-subtitle>{{ game.description }}</v-card-subtitle>
         </v-card>
       </v-col>
-      <v-col cols="12" md="4">
-        <v-card @click="selectGame('Mario')">
-          <!-- <v-img src="@/assets/mario_game.jpg" /> -->
-          <v-card-title>Mario Game</v-card-title>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card @click="selectGame('Flappy Bird')">
-          <!-- <v-img src="@/assets/flappy_game.jpg" /> -->
-          <v-card-title>Flappy Bird</v-card-title>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card @click="selectGame('Pacman')">
-          <!-- <v-img src="@/assets/pacman_game.jpg" /> -->
-          <v-card-title>Pacman</v-card-title>
-        </v-card>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-btn @click="goBackToHome">Return to Home</v-btn>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import { games } from "@/store/games";
+
 export default {
+  data() {
+    return {
+      games,
+    };
+  },
   methods: {
-    selectGame(game) {
-      this.$router.push({ name: game });
+    selectGame(route) {
+      this.$router.push({ name: route });
+    },
+    goBackToHome() {
+      this.$router.back();
     },
   },
 };

@@ -24,6 +24,9 @@
               ></div>
             </div>
           </v-card-text>
+          <v-card-actions>
+            <v-btn @click="goBack">Go Back to Collection</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -127,6 +130,9 @@ export default {
       if (newDirection) {
         this.$store.commit("SnakeModule/UPDATE_DIRECTION", newDirection);
       }
+    },
+    goBack() {
+      this.$router.back();
     },
   },
 };

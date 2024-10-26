@@ -1,3 +1,4 @@
+import { games } from "@/store/games";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -18,41 +19,21 @@ const routes = [
     },
   },
 
-  {
-    path: "/snake",
-    name: "Snake",
-    component: () => import("@/views/SnakeGameView.vue"), //lazy loading
-    meta: {
-      title: "Snake Page",
-    },
-  },
+  ...games.map((game) => ({
+    name: game.name,
+    path: game.path,
+    component: game.component,
+    meta: game.meta,
+  })),
 
-  {
-    path: "/mario",
-    name: "Mario",
-    component: () => import("@/views/MarioGameView.vue"),
-    meta: {
-      title: "Mario Page",
-    },
-  },
-
-  {
-    path: "/flappy-bird",
-    name: "Flappy Bird",
-    component: () => import("@/views/FlappyBirdGameView.vue"),
-    meta: {
-      title: "Flappy Bird Page",
-    },
-  },
-
-  {
-    path: "/pacman",
-    name: "Pacman",
-    component: () => import("@/views/PacmanGameView.vue"),
-    meta: {
-      title: "Pacman Page",
-    },
-  },
+  // {
+  //   path: "/snake",
+  //   name: "Snake",
+  //   component: () => import("@/views/SnakeGameView.vue"), //lazy loading
+  //   meta: {
+  //     title: "Snake Page",
+  //   },
+  // },
 ];
 
 const router = createRouter({
@@ -61,7 +42,7 @@ const router = createRouter({
 });
 // add logic before each router navigation
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title;
+  document.title = to.meta.title || "Default Title";
   next();
 });
 
