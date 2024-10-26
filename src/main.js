@@ -4,7 +4,6 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-// import { games } from "./store/games";
 import ScoreBoardComponent from "./components/ScoreBoardComponent.vue";
 
 loadFonts();
@@ -12,15 +11,4 @@ loadFonts();
 const app = createApp(App);
 
 app.component("ScoreBoardComponent", ScoreBoardComponent);
-// games.forEach((game) => {
-//   router.beforeEach((to, from, next) => {
-//     if (to.name === game.name && !store.hasModule(game.name)) {
-//       game.module().then((module) => {
-//         store.registerModule(game.moduleName, module.default);
-//         console.log("store :: ", store);
-//       });
-//     }
-//     next();
-//   });
-// });
 app.use(router).use(store).use(vuetify).mount("#app");

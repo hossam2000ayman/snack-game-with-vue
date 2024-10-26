@@ -25,15 +25,6 @@ const routes = [
     component: game.component,
     meta: game.meta,
   })),
-
-  // {
-  //   path: "/snake",
-  //   name: "Snake",
-  //   component: () => import("@/views/SnakeGameView.vue"), //lazy loading
-  //   meta: {
-  //     title: "Snake Page",
-  //   },
-  // },
 ];
 
 const router = createRouter({
