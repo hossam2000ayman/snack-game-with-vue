@@ -20,4 +20,15 @@ export const games = [
       title: "Tic Tac Toe Page",
     },
   },
+  {
+    name: "Platformer",
+    path: "/platformer",
+    component: () => import("@/views/PlatformerGameView.vue"),
+    description:
+      "Put your strategic thinking to the test in this engaging 2D Puzzle Game, where you match colorful tiles to create combos and clear the board!",
+    image: () => require("@/assets/images/puzzle.jpg"),
+    meta: {
+      title: "Platformer Page",
+    },
+  },
 ];
